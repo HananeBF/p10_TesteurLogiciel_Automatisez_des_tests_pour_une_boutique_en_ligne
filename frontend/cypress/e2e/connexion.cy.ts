@@ -96,6 +96,8 @@ que je trouve le bouton de connexion : data-cy="login-submit"
 que je clique sur ce bouton
 mais que la connexion au serveur est impossible
 Alors, j'ai un page d'erreur (exemple 5xx)
+
+--alors je teste juste pour voir
   })
   
 */
