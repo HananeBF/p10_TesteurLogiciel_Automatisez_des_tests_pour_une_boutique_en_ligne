@@ -52,11 +52,14 @@ describe('Connexion avec email et mot de passe correct depuis la page Accueil pu
 
   it('connexion ok avec bon email et mdp', () => {
     cy.get('[data-cy="nav-link-login"]').should('contain', 'Connexion').click()
+    cy.get('[data-cy="login-form"]').should('be.visible')
     cy.get('[data-cy="login-input-username"]').type("test2@test.fr")
     cy.get('[data-cy="login-input-password"]').type("testtest")
     cy.get('[data-cy="login-submit"]').should('contain', 'Se connecter').click()
-    cy.get('[data-cy="nav-link-cart"]').should('contain', 'Mon panier')
-    cy.get('[data-cy="nav-link-logout"]').should('contain', 'Déconnexion')
+    cy.get('[data-cy="nav-link-cart"]').should('contain', 'Mon panier').should('be.visible')
+    cy.get('[data-cy="nav-link-logout"]').should('contain', 'Déconnexion').should('be.visible')
+    cy.get('[data-cy="nav-link-login"]').should('not.be.visible')
+    cy.get('[data-cy="nav-link-register"]').should('not.be.visible')
   })
 
 
@@ -107,16 +110,8 @@ describe('Tests de connexion échouée', () => {
     cy.get('[data-cy="login-errors"]').should('be.visible').and('contain', 'Merci de remplir correctement tous les champs')
   })
 
-  //   it('devrait échouer si target submit invalid', () => {
-  //     cy.get('[data-cy="nav-link-login"]').should('contain', 'Connexion').click()   
-  //     cy.get('[data-cy="login-input-username"]').type("test2@test.fr")
-  //     //if valid, pass, sinon, fail
-  //     cy.get('[data-cy="login-input-password"]').type("testtest")
-  //     cy.get('[data-cy="login-submit"]').should('contain', 'Se connecter').click()
-  //     cy.get('[data-cy="nav-link-cart"]').should('contain', 'Mon panier')
-  //     cy.get('[data-cy="nav-link-logout"]').should('contain', 'Déconnexion')
-  //   })
-  // })
+
+})
 
   describe('chargement de page ou de ses composants échoués', () => {
     beforeEach(() => {
@@ -146,4 +141,14 @@ describe('Tests de connexion échouée', () => {
       cy.get('[data-cy="nav-link-login"]').click()
       cy.get('[data-cy="login-submit"]').should('not.be.visible')
     })
+
+    it('devrait échouer si target submit invalid', () => {
+  cy.get('[data-cy="nav-link-login"]').should('contain', 'Connexion').click()   
+  cy.get('[data-cy="login-input-username"]').type("test2@test.fr")
+  
+  cy.get('[data-cy="login-input-password"]').type("testtest")
+  cy.get('[data-cy="login-submit"]').should('contain', 'Se connecter').click()
+  cy.get('[data-cy="nav-link-cart"]').should('not.be.visible')
+  cy.get('[data-cy="nav-link-logout"]').should('be.visible')
+  })
   })
