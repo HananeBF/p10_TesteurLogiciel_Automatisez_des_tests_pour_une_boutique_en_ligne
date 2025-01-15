@@ -1,6 +1,6 @@
 const baseURL = 'http://localhost:8080/#/'
 
-
+//ajouter le même test avec mobile ?
 describe('visit all pages via NavBar', () => {
   beforeEach(() => {
     cy.visit(baseURL)
