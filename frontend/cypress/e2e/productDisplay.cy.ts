@@ -21,24 +21,18 @@ describe('product display frome hmepage with descriptions and stock', () => {
     // il devrait y avoir les description et non les ingredients mais je dois vérifier que 
     // prix product-home-price 
     // et consulter product-home-link
-
-    //verifier que l'API répond bien avant de vérifier que les éléments soient visibles
-    // basculer ci-dessus dans apiProducts
-
-    // cy.get('#other-products').each() => {
-
-    //   // cy.wrap().within(() => {
-
+  
+    // cy.get('#other-products').find('article') 
     //   //   cy.get('picture').should('be.visible')
     //   //   cy.get('name').should('be.visible')
     //   //   cy.get('description').should('be.visible')
     //   //   cy.get('price').should('be.visible')
     //   //   cy.get('availableStock').should('be.visible')
 
-    //   // })
+    
 
     // }
-    
+
   })
 
 })

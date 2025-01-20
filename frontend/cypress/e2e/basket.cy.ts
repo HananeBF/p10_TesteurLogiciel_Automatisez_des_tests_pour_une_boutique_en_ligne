@@ -1,3 +1,7 @@
+const baseURL = 'http://localhost:8080/#'
+const apiLogin = `${Cypress.env("apiUrl")}/login`
+
+
 describe('consulter le panier en étant connecté', () => {
     beforeEach(() => {
         cy.visit(baseURL)
