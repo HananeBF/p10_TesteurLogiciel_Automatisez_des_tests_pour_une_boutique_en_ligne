@@ -3,10 +3,10 @@ let productId
 const apiProducts = `${Cypress.env("apiUrl")}/products/`
 
 
-describe('product display frome hmepage with descriptions and stock', () => {
+describe('product display frome homepage with descriptions and stock', () => {
   beforeEach(() => {
     cy.visit(baseURL)
-    cy.intercept('GET', 'http://localhost:8081/products').as('products')
+  
 
   })
 

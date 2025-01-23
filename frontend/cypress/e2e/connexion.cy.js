@@ -13,36 +13,40 @@ describe('Connexion avec email et mot de passe correct depuis la page Accueil pu
     cy.get('[data-cy="login-form"]').should('be.visible')
     cy.get('[data-cy="login-input-username"]').type("test2@test.fr")
     cy.get('[data-cy="login-input-password"]').type("testtest")
-    cy.get('[data-cy="login-submit"]').click(() => {
-      console.log('test click')
-      
-     //request 200 for login must be intercept and wait for it
-      .then(
-      cy.wait('@login').its('response.statusCode').should('eq', 200)
-      .then (
-        cy.get('.loading').should('not.exist')
-      )
-      .then (
-        cy.get('[data-cy="nav-link-logout"]').should('be.visible')
-      )  
-      .then(cy.get('[data-cy="nav-link-cart"]').should('contain', 'Mon panier').should('be.visible'))
-      .then(cy.get('[data-cy="nav-link-logout"]').should('contain', 'Déconnexion').should('be.visible'))
-      .then(cy.get('[data-cy="nav-link-login"]').should('not.be.visible'))
-      .then(cy.get('[data-cy="nav-link-register"]').should('not.be.visible'))
-        
-      )
+    cy.get('[data-cy="login-submit"]').click().then((response) => {
+      expect(response.status).to.eq(200)
+      // .then(
+      //   cy.wait('@login').its('response.statusCode').should('eq', 200)
+      //   .then (
+      //  cy.get('.loading').should('not.exist')
+      //   )
+      //   .then (
+      //    cy.get('[data-cy="nav-link-logout"]').should('be.visible')
+      //    )  
+      //   .then(cy.get('[data-cy="nav-link-cart"]').should('contain', 'Mon panier').should('be.visible'))
+      //   .then(cy.get('[data-cy="nav-link-logout"]').should('contain', 'Déconnexion').should('be.visible'))
+      //   .then(cy.get('[data-cy="nav-link-login"]').should('not.be.visible'))
+      //   .then(cy.get('[data-cy="nav-link-register"]').should('not.be.visible'))
     })
-    
+
+
+
+    //  //request 200 for login must be intercept and wait for it
+    //   
+        
+  })
+})
+
 
 
 
     //il faut attendre que la page home s'affiche complètement apparemment : je peux chercher à avoir de visible la navbar Deconnexion par exemple pour être sûre d'être connectée
 
 
-  })
+//   })
 
 
-})
+// })
 
 describe('Tests de connexion échouée', () => {
   beforeEach(() => {

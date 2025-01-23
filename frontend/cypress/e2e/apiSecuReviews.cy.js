@@ -134,3 +134,5 @@ describe('si je ne suis pas connectée je ne peux pas poster un avis', () => {
         
     })
 })
+
+// test à faire "drop table Utilisateurs" et autres injections requetes sql exemple Dupont';-- (login) pi ' or 1 -- pour le mdp
