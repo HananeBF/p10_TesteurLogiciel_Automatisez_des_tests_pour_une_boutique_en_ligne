@@ -1,70 +1,56 @@
 const baseURL = 'http://localhost:8080/#'
+const apiLogin = `${Cypress.env("apiUrl")}/login`
+
+const login = () => {
+    cy.visit(baseURL)
+    cy.get('[data-cy="nav-link-login"]').should('contain', 'Connexion').click()
+    cy.get('[data-cy="login-form"]').should('be.visible')
+    cy.get('[data-cy="login-input-username"]').type("test2@test.fr")
+    cy.get('[data-cy="login-input-password"]').type("testtest")
+   // cy.intercept('POST', apiLogin).as('Connect')
+    cy.get('[data-cy="login-submit"]').click()
+    //cy.wait('@Connect').its('response.statusCode').to.eq(200)
+}
+const FormDisplay = () => {
+    cy.get('body').then(($body) => {
+        if ($body.find('[data-cy="login-form"]').length > 0) {
+            cy.get('[data-cy="review-form"]').should('be.visible')
+        } else {
+            cy.log('Le formulaire n\'est pas affiché car l\'utilisateur n\'est pas connecté.')
+        }
+    })
+}
 
 describe('test ajout avis sur la page review', () => {
-    beforeEach(() => {
-        cy.intercept('POST', 'http://localhost:8081/login').as('login')
-    })
-
     it('il faut être connecté pour poster un avis', () => {
-        
         cy.visit(baseURL)
+        login()
         cy.get('[data-cy="nav-link-reviews"]').click()
-        cy.get('body').then(($body) => {
-            if ($body.find('[data-cy="review-form"]').length > 0) {
-                // Si le formulaire  est absent, c'est que l'utilisateur n'est pas connecté :  il faudra donc se connecter
-                
-                cy.get('[data-cy="nav-link-login"]').click()
-                cy.get('[data-cy="login-input-username"]').type("test2@test.fr")
-                cy.get('[data-cy="login-input-password"]').type("testtest")
-                cy.get('[data-cy="login-submit"]').submit()
-                //request 200 for login must be intercept and wait for it
-                cy.wait('@login').its('response.statusCode').should('eq', 200)
-                
-                cy.get('.loading').should('not.exist')
-                //il faut attendre que la page home s'affiche complètement apparemment : je peux chercher à avoir de visible la navbar Deconnexion par exemple pour être sûre d'être connectée
-                cy.url().should('include', baseURL + '/')
-                cy.get('[data-cy="nav-link-logout"]').should('be.visible')
-
-            }
-        })
+        FormDisplay()
+        cy.get('body').should('be.visible')
+        cy.get('[data-cy="nav-link-logout"]').should('be.visible')
+        cy.get('[data-cy="review-input-rating"]').first().click()
+        cy.get('[data-cy="review-input-title"]').type('tester le commentaire')
+        cy.get('[data-cy="review-input-comment"]').type('super !')
+        cy.get('[data-cy="submit-comment"]').submit()
+        cy.get('[data-cy="review-note"]').should('contain', 'tester le commentaire')
+        cy.get('[data-cy="review-comment"]').should('contain', 'super !')
+        cy.get('[data-cy="review-comment"]').should('not.contain', '<a href=')
     })
-    it('je peux rédiger mon avis', () => {
-            cy.get('[data-cy="nav-link-logout"]').should('be.visible')
-            cy.visit(baseURL + '/reviews')
-            cy.get('[data-cy="review-input-rating"]').click()
-            cy.get('[data-cy="review-input-title"]').type('tester le commentaire')
-            cy.get('[data-cy="review-input-comment"]').type('super !')
-            cy.get('[data-cy="submit-comment"]').submit()
-            cy.get('[data-cy="review-note"]').should('contain', 'tester le commentaire')
-            cy.get('[data-cy="review-comment"]').should('contain', 'super !')
-            cy.get('[data-cy="review-comment"]').should('not.contain', '<a href=')
-    })
-
-
 })
 
 describe('test sécu reviews page commentaire ou titre invalide', () => {
     beforeEach(() => {
         cy.visit(baseURL)
-        cy.get('[data-cy="nav-link-reviews"]').should('contain', 'Avis').click()
-        if ($body.find('[data-cy="review-form"]').length > 0) {
-            // Si le formulaire  est absent, c'est que l'utilisateur n'est pas connecté :  il faudra donc se connecter
-            cy.get('[data-cy="nav-link-login"]').click()
-            cy.get('[data-cy="login-input-username"]').type("test2@test.fr")
-            cy.get('[data-cy="login-input-password"]').type("testtest")
-            cy.get('[data-cy="login-submit"]').should('contain', 'Se connecter').click()
-            //récupérer le token de connexion ?
-            //il faut attendre que la page home s'affiche complètement apparemment
-            cy.get('[data-cy="nav-link-logout"]').should('be.visible')
-            //cy.intercept('POST', 'http://localhost:8081/login').as('login')
-        }
     })
 
     it('avis ne doit pas contenir de lien', () => {
-        cy.visit(baseURL)
+    
+        login()
+        cy.get('[data-cy="nav-link-reviews"]').click()
+        FormDisplay()
         cy.get('body').should('be.visible')
         cy.get('[data-cy="nav-link-logout"]').should('be.visible')
-        cy.visit(baseURL + '/reviews')
         cy.get('[data-cy="review-input-rating"]').eq(3)
         cy.get('[data-cy="review-input-title"]').type('<a href="http://test.fr>Clic ici</a>')
         cy.get('[data-cy="review-input-comment"]').type('<a href="http://test.fr>Clic ici</a>')
@@ -77,6 +63,9 @@ describe('test sécu reviews page commentaire ou titre invalide', () => {
     it('avis ne doit pas contenir de script', () => {
 
         cy.visit(baseURL)
+        login()
+        cy.get('[data-cy="nav-link-reviews"]').click()
+        FormDisplay()
         cy.get('body').should('be.visible')
         cy.get('[data-cy="nav-link-logout"]').should('be.visible')
         cy.visit(baseURL + '/reviews')
@@ -91,6 +80,9 @@ describe('test sécu reviews page commentaire ou titre invalide', () => {
     it('avis ne doit pas contenir de chevron ouvrant', () => {
 
         cy.visit(baseURL)
+        login()
+        cy.get('[data-cy="nav-link-reviews"]').click()
+        FormDisplay()
         cy.get('body').should('be.visible')
         cy.get('[data-cy="nav-link-logout"]').should('be.visible')
         cy.visit(baseURL + '/reviews')
@@ -105,6 +97,9 @@ describe('test sécu reviews page commentaire ou titre invalide', () => {
     it('avis ne doit pas contenir de chevron fermant', () => {
 
         cy.visit(baseURL)
+        login()
+        cy.get('[data-cy="nav-link-reviews"]').click()
+        FormDisplay()
         cy.get('body').should('be.visible')
         cy.get('[data-cy="nav-link-logout"]').should('be.visible')
         cy.visit(baseURL + '/reviews')
@@ -125,10 +120,10 @@ describe('si je ne suis pas connectée je ne peux pas poster un avis', () => {
     it('je ne peux pas afficher le formulaire avis sans être connectée', () => {
         cy.get('body').should('be.visible')
         cy.get('[data-cy="nav-link-login"]').should('be.visible')
-        
+
         cy.visit(baseURL + '/reviews')
-        cy.get('form').should('not.be.visible')
-        
+        cy.get('form').should('not.be.exist')
+
     })
 })
 

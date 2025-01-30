@@ -20,7 +20,6 @@ describe('recupérer des prodruits via api with descriptions and stock', () => {
     it("Récupérer les détails d'un produit par id", () => {
         // Vérifiez que l'ID de catégorie a été extrait avec succès
         cy.request("GET", apiProducts + '/9').then((response) => {
-            console.log(response)
             expect(productId).to.be.a("number")
             expect(response.status).to.eq(200)
             const responseBody = response.body

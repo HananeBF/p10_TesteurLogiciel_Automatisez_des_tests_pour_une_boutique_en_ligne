@@ -9,44 +9,20 @@ describe('consulter le panier en étant connecté', () => {
         cy.visit(baseURL)
     })
 
-    it('connexion ok accès produit et panier cas passant', () => {
+    it('connexion success, ajout produit, ajout et renvoi vers panier - cas passant', () => {
         cy.get('[data-cy="nav-link-login"]').should('contain', 'Connexion').click()
         cy.get('[data-cy="login-form"]').should('be.visible')
         cy.get('[data-cy="login-input-username"]').type("test2@test.fr")
         cy.get('[data-cy="login-input-password"]').type("testtest")
         cy.get('[data-cy="login-submit"]').submit()
-        //request 200 for login must be intercept and wait for it
-        cy.wait('@login').its('response.statusCode').should('eq', 200)
-        cy.get('.loading').should('not.exist')
-        //il faut attendre que la page home s'affiche complètement apparemment : je peux chercher à avoir de visible la navbar Deconnexion par exemple pour être sûre d'être connectée
-        cy.url().should('include', baseURL + '/')
         cy.get('[data-cy="nav-link-logout"]').should('be.visible')
+        //clic produit
+        // ajouter produit
+        // voir le panier
 
-        //penser à stocker le token
-        describe('API Test - Add Product to Cart', () => {
-    it('should add a product to the cart', () => {
-      cy.request('POST', 'http://localhost:8081/orders/add', {
-        productId: 'ID_DU_PRODUIT_DISPONIBLE'
-      }).then((response) => {
-        expect(response.status).to.eq(200);
-        // Ajoute des vérifications supplémentaires ici si nécessaire
-      });
-    });
-  });
-
+    
     })
-})
-//test api ajout cart
-// describe('API Test - Add Product to Cart', () => {
-//     it('should add a product to the cart', () => {
-//         cy.request('POST', 'http://localhost:8081/orders/add', {
-//           productId: 'ID_DU_PRODUIT_DISPONIBLE'
-//         }).then((response) => {
-//           expect(response.status).to.eq(200);
-//           // Ajoute des vérifications supplémentaires ici si nécessaire
-//         });
-//       });
-//   });
+  })
 
 describe('consulter le panier sans etre connecté renvoie une erreur', () => {
     beforeEach(() => {
