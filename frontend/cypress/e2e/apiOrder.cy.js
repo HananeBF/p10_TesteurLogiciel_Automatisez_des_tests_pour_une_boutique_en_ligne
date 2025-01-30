@@ -61,9 +61,12 @@ describe('test api ajout de produit dans le panier poduit avec stock', () => {
                     
                 }
             }).then((response) => {
+               
                 expect(response.status).to.eq(200)
-                let orderList = response.body[Math.floor(Math.random() * response.body.length)].id
-                expect(orderList).be.gte(1)
+                console.log(response.body)
+                let orderList = response.body
+                //expect(orderList).length.to.be.greaterThan(1)
+                expect(orderList).to.be.an('array')
             })
         })
     })

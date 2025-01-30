@@ -8,12 +8,13 @@ describe('recupérer des prodruits via api with descriptions and stock', () => {
    
     it('doit récupérer tous les produits de la base et extraire les id', () => {
         cy.request("GET", apiProducts).then((response) => {
-            console.log(response)
+           
             expect(response.status).to.eq(200)
+            expect(response.body).length.to.be.greaterThan(5)
             productId = response.body[Math.floor(Math.random() * response.body.length)].id
             const allRequestResponses = response.allRequestResponses
             expect(allRequestResponses).to.be.an('array')
-            expect(allRequestResponses.length).to.be.gte(1)
+            
         })
     })
 
