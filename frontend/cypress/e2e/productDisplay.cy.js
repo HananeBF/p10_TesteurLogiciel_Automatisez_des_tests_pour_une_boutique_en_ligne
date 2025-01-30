@@ -36,5 +36,14 @@ describe('product display frome homepage with descriptions and stock', () => {
   })
 
 })
-
+describe('API Test - Product Details', () => {
+  it('should return the product details', () => {
+    const productId = 'ID_DU_PRODUIT'; // Remplace par l'ID du produit
+    cy.request('GET', `http://localhost:8081/products/${productId}`)
+      .then((response) => {
+        expect(response.status).to.eq(200);
+        // Ajoute des vérifications supplémentaires ici si nécessaire
+      });
+  });
+});
 
