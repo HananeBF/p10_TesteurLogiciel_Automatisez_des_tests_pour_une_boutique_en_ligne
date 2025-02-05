@@ -66,7 +66,6 @@ describe('test api ajout de produit dans le panier poduit avec stock', () => {
                 let orderList = response.body.orderLines
                 expect(orderList).length.to.be.greaterThan(1)
                 expect(orderList).to.be.an('array')
-                //expect(orderList).to.have.property('quantity')
             })
         })
     })
@@ -81,7 +80,7 @@ describe('ajout en erreur car produit out of stock', () => {
         cy.window().then((win) => {
             cat = win.localStorage.getItem("authToken")
             cy.request("GET", apiProduct + '/3').then((response) => {
-                expect(response.body).to.have.property('availableStock').and.be.gte(1)
+                expect(response.body).to.have.property('availableStock').and.be.lessThan(0)
 
                 cy.request({
                     method: 'PUT',

@@ -28,6 +28,7 @@ describe('Connexion avec email et mot de passe correct depuis la page Accueil pu
     //   expect(response.status).to.be.gte(200).and.lt(399)
     //})
     // je dois récupérer le token ?
+    //forcer le reload de la page de page d'accueil et voir si le bouton déconnexion apparaît bien, puis le bouton panier
 
     // 
   })

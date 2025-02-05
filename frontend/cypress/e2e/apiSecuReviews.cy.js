@@ -55,6 +55,9 @@ describe('test API cas non passant', () => {
         cy.request({
             method: 'POST',
             url: apiReview,
+            headers: {
+                "Authorization": ""
+            },
             body: {
                 title: 'Super',
                 comment: "ça sent trop bon",
