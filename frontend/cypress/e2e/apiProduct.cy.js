@@ -39,20 +39,6 @@ describe('recupérer des prodruits via api with descriptions and stock', () => {
             expect(allRequestResponses.length).to.be.gte(1)
         })
 
-    })
-// ci-dessous test affichage, pas api
-    // it('doit afficher 3 produits randoms dans la home avec image description prix stock et le bouton consulter', () => {
-    //     cy.request("GET", apiProductsHome).then((response) => {
-
-    //         expect(response.status).to.eq(200)
-    //         console.log(response.body)
-    //         expect(response.body).length.to.be.eq(3)
-
-    //     })
-
-
-    // })
-
-    
+    })  
 
 })

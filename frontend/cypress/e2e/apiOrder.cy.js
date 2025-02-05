@@ -24,15 +24,16 @@ const login = () => {
 
 
 describe('test api ajout de produit dans le panier poduit avec stock', () => {
-    it('parcours nominal connectée, on ajoute 1 produit dans le panier sans rupture de stock id 9 et on voit le panier', () => {
+    it('parcours nominal connectée, on ajoute 1 produit dans le panier sans rupture de stock id 10 et on voit le panier', () => {
         login()
         let cat = null
         cy.window().then((win) => {
             cat = win.localStorage.getItem("authToken")
-            cy.request("GET", apiProduct + '/9').then((response) => {
+            cy.request("GET", apiProduct + '/10').then((response) => {
 
                 expect(response.status).to.eq(200)
-                //expect(response.body).to.have.property('availableStock').and.be.gte(1)
+                //avoir plus d'un produit en stock pour le commander
+                expect(response.body).to.have.property('availableStock').and.be.gte(1)
 
                 cy.request({
                     method: 'PUT',
@@ -50,7 +51,6 @@ describe('test api ajout de produit dans le panier poduit avec stock', () => {
                     expect(response.status).to.eq(200)
                 })
             }).then((response) => {
-                console.log(response)
                 expect(response.status).to.eq(200)
             })
             cy.request({
@@ -61,12 +61,12 @@ describe('test api ajout de produit dans le panier poduit avec stock', () => {
                     
                 }
             }).then((response) => {
-               
-                expect(response.status).to.eq(200)
                 console.log(response.body)
-                let orderList = response.body
-                //expect(orderList).length.to.be.greaterThan(1)
+                expect(response.status).to.eq(200)
+                let orderList = response.body.orderLines
+                expect(orderList).length.to.be.greaterThan(1)
                 expect(orderList).to.be.an('array')
+                //expect(orderList).to.have.property('quantity')
             })
         })
     })
@@ -75,7 +75,7 @@ describe('test api ajout de produit dans le panier poduit avec stock', () => {
 })
 
 describe('ajout en erreur car produit out of stock', () => {
-    it('je dois avoir une erreur car ajout de produit out of stock Sentiments printaniers -3 ', () => {
+    it('je dois avoir une erreur car ajout de produit out of stock produit id 3 stock négatif ', () => {
         login()
         let cat = null
         cy.window().then((win) => {
