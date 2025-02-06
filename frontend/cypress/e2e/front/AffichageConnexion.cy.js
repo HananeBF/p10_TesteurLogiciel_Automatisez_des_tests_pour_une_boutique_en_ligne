@@ -12,25 +12,9 @@ describe('Connexion avec email et mot de passe correct depuis la page Accueil pu
     cy.get('[data-cy="login-form"]').should('be.visible')
     cy.get('[data-cy="login-input-username"]').type("test2@test.fr")
     cy.get('[data-cy="login-input-password"]').type("testtest")
-
-    
     cy.get('[data-cy="login-submit"]').click()
     cy.get('[data-cy="nav-link-logout"]').should('be.visible')
-    cy.get('[data-cy="nav-link-cart"]').should('contain', 'Mon panier').should('be.visible')
-
-    //en fait, j'envoie 2 fois la requête si je remet un post ici. la première au click, et ensuite la réponse : du coup, j'ai une 404 car je suis déjà connectée ?
-    // cy.intercept('POST', apiLogin).as('postRequest')
-    // cy.request({
-    //   method: 'GET',
-    //   url: apiLogin,
-    //   failOnStatusCode: false
-    // }).then((response) => {
-    //   expect(response.status).to.be.gte(200).and.lt(399)
-    //})
-    // je dois récupérer le token ?
-    //forcer le reload de la page de page d'accueil et voir si le bouton déconnexion apparaît bien, puis le bouton panier
-
-    // 
+    cy.get('[data-cy="nav-link-cart"]').should('contain', 'Mon panier').should('be.visible') 
   })
 
 
@@ -40,12 +24,6 @@ describe('Connexion avec email et mot de passe correct depuis la page Accueil pu
   describe('Tests de connexion échouée', () => {
     beforeEach(() => {
       cy.visit(baseURL)
-      //before déconnecter la session Si Déconnexion est visible
-      // cy.get('[data-cy="nav-link-logout"]').then((logout) => {
-      //   if (logout.is(':visible')) {
-      //     cy.wrap(logout).click()
-      //   }
-      // })
     })
 
     it('devrait échouer avec un mauvais login et mdp', () => {
@@ -55,7 +33,6 @@ describe('Connexion avec email et mot de passe correct depuis la page Accueil pu
       cy.get('[data-cy="login-submit"]').click()
 
       //submit doit indiquer une erreur
-
       cy.get('[data-cy="login-errors"]').should('be.visible').and('contain', 'Identifiants incorrects')
 
     })
@@ -91,7 +68,6 @@ describe('Connexion avec email et mot de passe correct depuis la page Accueil pu
       //submit doit indiquer une erreur différente eFt les labels des inputs doivent être en invalid
       cy.get('[data-cy="login-errors"]').should('be.visible').and('contain', 'Merci de remplir correctement tous les champs')
     })
-
 
   })
 

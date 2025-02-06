@@ -5,16 +5,17 @@ const apiProducts = `${Cypress.env("apiUrl")}/products`
 
 describe('recupérer des prodruits via api with descriptions and stock', () => {
 
-   
+
     it('doit récupérer tous les produits de la base et extraire les id', () => {
         cy.request("GET", apiProducts).then((response) => {
-           
+
             expect(response.status).to.eq(200)
             expect(response.body).length.to.be.greaterThan(5)
             productId = response.body[Math.floor(Math.random() * response.body.length)].id
             const allRequestResponses = response.allRequestResponses
             expect(allRequestResponses).to.be.an('array')
-            
+
+
         })
     })
 
@@ -39,6 +40,23 @@ describe('recupérer des prodruits via api with descriptions and stock', () => {
             expect(allRequestResponses.length).to.be.gte(1)
         })
 
-    })  
+    })
+
+})
+
+describe('erreur car produit inexistant', () => {
+
+
+    it('doit être en 404 car produit inexistant', () => {
+
+        cy.request({
+            method: 'GET',
+            url: apiProducts + '/1000',
+
+            failOnStatusCode: false
+        }).then((response) => {
+            expect(response.status).to.eq(404)
+        })
+    })
 
 })

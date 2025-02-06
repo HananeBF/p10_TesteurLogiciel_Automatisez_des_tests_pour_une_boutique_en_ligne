@@ -6,13 +6,13 @@ const apiProducts = `${Cypress.env("apiUrl")}/products/`
 describe('product display frome homepage with descriptions and stock', () => {
   beforeEach(() => {
     cy.visit(baseURL)
-  
 
   })
 
   it('doit afficher plusieurs produits dans la home avec image description prix stock et le bouton consulter', () => {
     cy.url().should('include', baseURL)
     cy.get('#other-products').should('have.length.greaterThan', 0)
+    cy.get('.list-products').should('have.length', 3)
     // il fait vérifier le chargement de la page donc DOM load
     // les produits dans la home via l'id ?
     // et chaque article product-home , 
