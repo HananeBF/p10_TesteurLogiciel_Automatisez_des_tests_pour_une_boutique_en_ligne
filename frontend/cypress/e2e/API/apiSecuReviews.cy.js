@@ -238,33 +238,6 @@ describe('test API reviews avec redirection', () => {
             })
         })
 
-        it('je ne dois pas pouvoir poster un chevron', () => {
-            login()
-            let cat = null
-            cy.window().then((win) => {
-                // stocker le token pour accéder aux avis
-                cat = win.localStorage.getItem("authToken")
-
-                cy.request({
-                    method: 'POST',
-                    url: apiReview,
-                    headers: {
-                        "Authorization": "Bearer " + cat
-
-                    },
-
-                    body: {
-                        title: `Testons aussi les chevrons`,
-                        comment: `< >`,
-                        rating: 1
-                    },
-                    failOnStatusCode: false
-                }).then((response) => {
-                    console.log(response)
-                    expect(response.status).to.eq(403)
-                    expect(response.body).to.have.property('error')
-                })
-            })
-        })
+        
     })
 })

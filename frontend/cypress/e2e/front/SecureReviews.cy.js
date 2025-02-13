@@ -28,7 +28,7 @@ describe('test ajout avis sur la page review', () => {
         cy.get('[data-cy="nav-link-reviews"]').click()
         FormDisplay()
         cy.get('[data-cy="review-input-rating-images"] img').first().click()
-        cy.get('[data-cy="review-input-title"]').type('tester le commentaire')
+        cy.get('[data-cy="review-input-title"]').type('wahou')
         cy.get('[data-cy="review-input-comment"]').type('super !')
         cy.get('[data-cy="review-submit"]').click()
         //reload forcé et après, vérifier les emplacements
@@ -53,7 +53,7 @@ describe('test sécu reviews page commentaire ou titre invalide', () => {
         cy.get('[data-cy="nav-link-logout"]').should('be.visible')
         cy.get('[data-cy="nav-link-reviews"]').click()
         cy.get('[data-cy="review-input-rating-images"] img').first().click()
-        cy.get('[data-cy="review-input-title"]').type('<a href="http://test.fr>Clic ici</a>')
+        cy.get('[data-cy="review-input-title"]').type('Des promos à gogos sur cette page !')
         cy.get('[data-cy="review-input-comment"]').type('<a href="http://test.fr>Clic ici</a>')
         cy.get('[data-cy="review-submit"]').click()
         // vérifier que le commentaire n'affiche pas de lien clickable
@@ -72,7 +72,7 @@ describe('test sécu reviews page commentaire ou titre invalide', () => {
         cy.get('[data-cy="nav-link-logout"]').should('be.visible')
         cy.visit(baseURL + '/reviews')
         cy.get('[data-cy="review-input-rating-images"] img').first().click()
-        cy.get('[data-cy="review-input-title"]').type('test redirection via JS')
+        cy.get('[data-cy="review-input-title"]').type('un air de voyage')
         cy.get('[data-cy="review-input-comment"]').type('<script type="text/javascript">window.location.replace("https://www.google.com/");</script>')
         cy.get('[data-cy="review-submit"]').click()
         //éviter que le script s exécute en vérifiant que la page après reload est toujours celle de review

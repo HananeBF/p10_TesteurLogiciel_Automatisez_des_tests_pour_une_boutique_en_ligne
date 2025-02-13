@@ -5,7 +5,10 @@ const pageProduit = 'http://localhost:8080/#/products'
 describe('products display from homepage with descriptions and stock', () => {
 
   it('doit afficher plusieurs produits dans la home avec image description prix stock et le bouton consulter', () => {
+    // aller sur la home 
     cy.visit(baseURL)
+    
+    // les produits de la home sont dans la section avec une id otherproduct, je vérifie qu'elle n'est pas vide
     cy.get('#other-products').should('have.length.greaterThan', 0)
     cy.get('.list-products [data-cy="product-home"]').each(($product) => {
       //vérifier que l'image est présente et a une src
@@ -32,6 +35,7 @@ describe('products display from homepage with descriptions and stock', () => {
       cy.wrap($product).find('[data-cy="product-link"]').should('exist').and('contain.text', 'Consulter')
       //vérifier que le produit a une description
       cy.wrap($product).find('[data-cy="product-description"]').should('exist').and('not.be.empty')
+
     })
 
 
@@ -46,9 +50,10 @@ describe('product display  with descriptions and stock', () => {
     cy.get('[data-cy="detail-product-img"]').should('exist').and('have.attr', 'src').and('not.be.empty')
     //vérifier que le produit a une description
     cy.get('[data-cy="detail-product-description"]').should('exist').and('not.be.empty')
-    //les infos du prix, stock, quantité sont dans le panier dans un formulaire vérifier les infos
+    //les infos du prix, stock, quantité et bouton d ajout sont dans le panier dans un formulaire vérifier les infos
     cy.get('[data-cy="detail-product-price"]').should('exist').and('not.be.empty')
     cy.get('[data-cy="detail-product-stock"]').should('exist').and('not.be.empty')
+    cy.get('[data-cy="detail-product-add"]').should('exist').and('contain.text', 'Ajouter au panier')
     
 
 
@@ -64,6 +69,7 @@ describe('product display  with descriptions and stock', () => {
     //pour la fiche produit, les infos du prix, stock, quantité sont dans le panier dans un formulaire vérifier les infos
     cy.get('[data-cy="detail-product-price"]').should('exist').and('not.be.empty')
     cy.get('[data-cy="detail-product-stock"]').should('exist').and('not.be.empty')
+    cy.get('[data-cy="detail-product-add"]').should('exist').and('contain.text', 'Ajouter au panier')
 
 
   })
@@ -78,6 +84,7 @@ describe('product display  with descriptions and stock', () => {
     //pour la fiche produit, les infos du prix, stock, quantité sont dans le panier dans un formulaire vérifier les infos
     cy.get('[data-cy="detail-product-price"]').should('exist').and('not.be.empty')
     cy.get('[data-cy="detail-product-stock"]').should('exist').and('not.be.empty')
+    cy.get('[data-cy="detail-product-add"]').should('exist').and('contain.text', 'Ajouter au panier')
 
 
   })
@@ -92,6 +99,7 @@ describe('product display  with descriptions and stock', () => {
     //pour la fiche produit, les infos du prix, stock, quantité sont dans le panier dans un formulaire vérifier les infos
     cy.get('[data-cy="detail-product-price"]').should('exist').and('not.be.empty')
     cy.get('[data-cy="detail-product-stock"]').should('exist').and('not.be.empty')
+    cy.get('[data-cy="detail-product-add"]').should('exist').and('contain.text', 'Ajouter au panier')
 
 
   })
@@ -106,6 +114,7 @@ describe('product display  with descriptions and stock', () => {
     //pour la fiche produit, les infos du prix, stock, quantité sont dans le panier dans un formulaire vérifier les infos
     cy.get('[data-cy="detail-product-price"]').should('exist').and('not.be.empty')
     cy.get('[data-cy="detail-product-stock"]').should('exist').and('not.be.empty')
+    cy.get('[data-cy="detail-product-add"]').should('exist').and('contain.text', 'Ajouter au panier')
 
 
   })
@@ -120,6 +129,7 @@ describe('product display  with descriptions and stock', () => {
     //pour la fiche produit, les infos du prix, stock, quantité sont dans le panier dans un formulaire vérifier les infos
     cy.get('[data-cy="detail-product-price"]').should('exist').and('not.be.empty')
     cy.get('[data-cy="detail-product-stock"]').should('exist').and('not.be.empty')
+    cy.get('[data-cy="detail-product-add"]').should('exist').and('contain.text', 'Ajouter au panier')
 
 
   })
@@ -134,6 +144,7 @@ describe('product display  with descriptions and stock', () => {
     //pour la fiche produit, les infos du prix, stock, quantité sont dans le panier dans un formulaire vérifier les infos
     cy.get('[data-cy="detail-product-price"]').should('exist').and('not.be.empty')
     cy.get('[data-cy="detail-product-stock"]').should('exist').and('not.be.empty')
+    cy.get('[data-cy="detail-product-add"]').should('exist').and('contain.text', 'Ajouter au panier')
 
 
   })
@@ -148,6 +159,7 @@ describe('product display  with descriptions and stock', () => {
     //pour la fiche produit, les infos du prix, stock, quantité sont dans le panier dans un formulaire vérifier les infos
     cy.get('[data-cy="detail-product-price"]').should('exist').and('not.be.empty')
     cy.get('[data-cy="detail-product-stock"]').should('exist').and('not.be.empty')
+    cy.get('[data-cy="detail-product-add"]').should('exist').and('contain.text', 'Ajouter au panier')
 
 
   })
@@ -165,6 +177,7 @@ describe('produit inconnu erreur possible voire page 404', () => {
     cy.get('[data-cy="detail-product-form"] div').each(($infos) => {
       cy.wrap($infos).find('[data-cy="detail-product-price"]').should('not.exist')
       cy.wrap($infos).find('[data-cy="detail-product-stock"]').should('not.exist')
+      cy.get('[data-cy="detail-product-add"]').should('not.exist')
     })
     
   })

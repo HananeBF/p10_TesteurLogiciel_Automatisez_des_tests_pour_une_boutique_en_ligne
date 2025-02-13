@@ -1,5 +1,6 @@
 const baseURL = 'http://localhost:8080/#'
 const pageLogin = 'http://localhost:8080/#/login'
+const productURL = 'http://localhost:8080/#/products'
 
 const login = () => {
   cy.visit(baseURL)
@@ -28,7 +29,7 @@ describe('affichage des boutons sur la page de login', () => {
   it('sans connexion les boutons panier et logout ne sont pas présents', () => {
     // sur la navbar je ne dois pas voir les liens déconnexion et Mon panier
     cy.get('[data-cy="nav-link-logout"]').should('not.exist')
-    cy.get('[data-cy="nav-link-cart"]').should('contain', 'Mon panier').and('not.exist')
+    cy.get('[data-cy="nav-link-cart"]').should('not.exist')
   })
 
 
@@ -49,10 +50,10 @@ describe('affichage bouton ajout au panier dans une fiche produit', () => {
     login()
     cy.visit(productURL + '/3')
 
-    cy.get('[data-cy="detail-product-name"]').should('exist').and('not.be.empty')
+    cy.get('[data-cy="detail-product-name"]').should('not.be.empty')
 
     //je vérifie la présence du bouton ajouter au panier
-    cy.get('data-cy="detail-product-add"').should('be.visible').and('contain', "Ajouter au panier")
+    cy.get('[data-cy="detail-product-add"]').should('be.visible').and('contain', "Ajouter au panier")
 
   })
 
