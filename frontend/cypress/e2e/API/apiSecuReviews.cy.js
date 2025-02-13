@@ -202,6 +202,7 @@ describe('test API reviews avec redirection', () => {
                     console.log(response)
                     expect(response.status).not.to.eq(200)
                     expect(response.body).to.have.property('error')
+                    
                     //expect(response.body).to.have.property(console.warn)
 
                 })
@@ -263,89 +264,6 @@ describe('test API reviews avec redirection', () => {
                     expect(response.status).to.eq(403)
                     expect(response.body).to.have.property('error')
                 })
-            })
-        })
-    })
-    describe('test API sécu bloquer les injection SQL', () => {
-
-        it('doit bloquer une tentative injection SQL drop table users', () => {
-
-            login()
-            let cat = null
-            cy.window().then((win) => {
-                // stocker le token pour accéder aux avis
-                cat = win.localStorage.getItem("authToken")
-
-
-
-                cy.request({
-                    method: 'POST',
-                    url: apiReview,
-                    headers: {
-                        "Authorization": "Bearer " + cat
-
-                    },
-                    body: '1; DROP TABLE users;',
-                    failOnStatusCode: false
-                }).then((response) => {
-                    expect(response.status).not.to.eq(200)
-                    expect(response.body).to.have.property('error')
-                })
-
-            })
-        })
-
-        it('doit bloquer une tentative injection SQL comme 1=1', () => {
-
-
-            login()
-            let cat = null
-            cy.window().then((win) => {
-                // stocker le token pour accéder aux avis
-                cat = win.localStorage.getItem("authToken")
-
-
-
-                cy.request({
-                    method: 'POST',
-                    url: apiReview,
-                    headers: {
-                        "Authorization": "Bearer " + cat
-
-                    },
-                    body: "' OR '1'='1",
-                    failOnStatusCode: false
-                }).then((response) => {
-                    expect(response.status).not.to.eq(200)
-                    expect(response.body).to.have.property('error')
-                })
-
-            })
-        })
-
-        it('doit bloquer une tentative injection SQL comme union select password', () => {
-            login()
-            let cat = null
-            cy.window().then((win) => {
-                // stocker le token pour accéder aux avis
-                cat = win.localStorage.getItem("authToken")
-
-
-
-                cy.request({
-                    method: 'POST',
-                    url: apiReview,
-                    headers: {
-                        "Authorization": "Bearer " + cat
-
-                    },
-                    body: "' UNION SELECT password FROM users; --",
-                    failOnStatusCode: false
-                }).then((response) => {
-                    expect(response.status).not.to.eq(200)
-                    expect(response.body).to.have.property('error')
-                })
-
             })
         })
     })

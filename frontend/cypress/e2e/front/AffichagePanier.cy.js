@@ -1,11 +1,17 @@
 const baseURL = 'http://localhost:8080/#'
+const productURL = 'http://localhost:8080/#/products'
 
 const apiLogin = `${Cypress.env("apiUrl")}/login`;
 const apiProduct = `${Cypress.env("apiUrl")}/products`;
 const apiAdd = `${Cypress.env("apiUrl")}/orders/add`;
 const apiOrder = `${Cypress.env("apiUrl")}/orders`;
 let cat
-let productId = 5
+let productId
+let stockInitial
+let quantity
+let nameProduct
+let stockUpdate
+
 
 const login = () => {
   cy.visit(baseURL)
@@ -13,80 +19,123 @@ const login = () => {
   cy.get('[data-cy="login-form"]').should('be.visible')
   cy.get('[data-cy="login-input-username"]').type("test2@test.fr")
   cy.get('[data-cy="login-input-password"]').type("testtest")
-
   cy.get('[data-cy="login-submit"]').click()
-  
 }
 
 
 describe('consulter le panier en étant connecté', () => {
   beforeEach(() => {
-    cy.visit(baseURL)
+    login()
   })
 
   it('connexion success, ajout produit, ajout et renvoi vers panier - cas passant', () => {
-    cy.visit(baseURL)
-    login()
     cy.get('[data-cy="nav-link-logout"]').should('be.visible')
-    cy.get('[data-cy="nav-link-products"]').click()
-    cy.get('[data-cy="product-link"]').first().click()
-    //doit contenir au moins 1 produit en stock : passer par data-cy="detail-product-stock" ?
+    cy.visit(productURL + '/5')
+    //cy.reload()
+    cy.get('[data-cy="detail-product-name"]').should('exist').and('not.be.empty')
 
+
+
+    //je vérifie que le stock initial est supérieur à 1
+    cy.get('[data-cy="detail-product-stock"]').then(($stockInitial) => {
+
+      stockInitial = parseInt($stockInitial.text())
+      // console.log(stockInitial)
+      expect(stockInitial).to.be.greaterThan(1)
+
+      
+
+      cy.get('[data-cy="detail-product-name"]').then(($name) => {
+        console.log($name)
+        nameProduct = $name.text()
+        console.log(nameProduct)
+
+
+
+
+        //cliquer sur ajouter au panier
+        cy.get('[data-cy="detail-product-add"]').click()
+
+        //aller dans le panier
+        cy.get('[data-cy="nav-link-cart"]').click()
+
+        //vérifier que le produit existe
+        cy.get('#cart-content [data-cy="cart-line"]').each((productPanier) => {
+          console.log(productPanier[0])
+           cy.wrap(productPanier[0]).within(() => {
+             cy.get('[data-cy="cart-line-name"]').should('contain', nameProduct)
+           })
+          //('[data-cy="cart-line-name"]').should('contain', nameProduct)
+        })
+
+        //retourner à la fiche produit 5
+        cy.go('back')
+
+        //le stock initial a dû être diminué de 1 car je n'ai pas touché à quantité
+        cy.get('[data-cy="detail-product-stock"]').then(($stockUpdate) => {
+          stockUpdate = parseInt($stockUpdate.text())
+          expect(stockUpdate).to.equal(stockInitial - 1)
+        })
+
+      })
+    })
 
   })
 })
 
-//ce serait avec API, à corriger poru les tests d'interface
-// describe('Test d\'ajout de produit au panier', () => {
+
+describe('être connecté et valider les quantités limites du produit ', () => {
+  beforeEach(() => {
+    login()
+    cy.visit(baseURL)
+    cy.get('[data-cy="nav-link-logout"]').should('be.visible')
+
+    cy.reload()
+    cy.visit(productURL + '/5')
+  })
+
+  it('doit vérifier les limites d\'entrée pour la quantité', () => {
 
 
-//   it('doit permettre d\'ajouter un produit au panier et vérifier les limites', () => {
-//     // Étape 1 : Connexion
-//     login()
+    cy.visit(productURL + '/5')
+    //vérifier la quantité envoyée de 1
+    cy.get('[data-cy="detail-product-quantity"]').clear().type(-1)
+    console.log(err)
+    cy.get('.error').should('contain', 'Quantité invalide')
 
-//     // Étape 2 : Vérification du produit
-//     cy.request("GET", `${apiProduct}/${productId}`).then((response) => {
-//       expect(response.status).to.eq(200);
-//       expect(response.body).to.have.property('availableStock').and.be.gte(1);
+    // Entrez un chiffre supérieur à 20
+    cy.get('[data-cy="detail-product-quantity"]').clear().type(21)
+    console.log(err)
+    cy.get('.error').should('contain', 'Quantité invalide')
+  })
+})
 
-//       // Étape 3 : Naviguer vers la page du produit
-//       cy.visit(`/products/${productId}`);
+describe('être connecté et valider les quantités limites du produit ', () => {
+  it('doit ajouter un élément au panier et vérifier via l\'API', () => {
 
-//       // Étape 4 : Cliquer sur "Ajouter au panier"
-//       cy.get('button.add-to-cart').click(); // Assure-toi que le sélecteur correspond
 
-//       // Étape 5 : Vérification que le produit a été ajouté au panier
-//       cy.request({
-//         method: 'GET',
-//         url: apiOrder,
-//         headers: {
-//           "Authorization": "Bearer " + authToken
-//         }
-//       }).then((response) => {
-//         expect(response.status).to.eq(200);
-//         const orderList = response.body.orderLines;
-//         expect(orderList).to.be.an('array');
-//         const produitExiste = orderList.some(item => item.product.id === productId);
-//         expect(produitExiste).to.be.true; // Vérifie que le produit existe
-//       });
+    cy.visit(productURL + '/5')
+    // Cliquez sur "ajouter au panier"
+    cy.get('[data-cy="detail-product-add"]').click()
 
-//       // Étape 6 : Vérifier que le stock a été mis à jour
-//       cy.request("GET", `${apiProduct}/${productId}`).then((response) => {
-//         expect(response.status).to.eq(200);
-//         const updatedStock = response.body.availableStock;
-//         expect(updatedStock).to.eq(response.body.availableStock - 1); // Vérifie que le stock a diminué de 1
-//       });
+    // Vérifiez le contenu du panier via l'API mais déjà vérifié dans test apiOrder
+    let cat = null
+    cy.window().then((win) => {
+      cat = win.localStorage.getItem("authToken")
 
-//       // Étape 7 : Tester les limites
-//       // Essayer d'ajouter une quantité négative
-//       cy.get('input.quantity').clear().type('-1'); // Assure-toi que le sélecteur correspond
-//       cy.get('button.add-to-cart').click();
-//       cy.get('.error-message').should('contain', 'Quantité invalide'); // Vérifie que le message d'erreur s'affiche
+      cy.request({
+        method: 'GET',
+        url: apiOrder,
+        headers: {
+          "Authorization": "Bearer " + cat
+        }
+      }).then((response) => {
 
-//       // Essayer d'ajouter une quantité supérieure à 20
-//       cy.get('input.quantity').clear().type('25'); // Assure-toi que le sélecteur correspond
-//       cy.get('button.add-to-cart').click();
-//       cy.get('.error-message').should('contain', 'Quantité supérieure à la limite'); // Vérifie que le message d'erreur s'affiche
-//     });
-//   });
-// });
+        //console.log(response.body)
+        expect(response.status).to.eq(200)
+      })
+    })
+  })
+})
+
+

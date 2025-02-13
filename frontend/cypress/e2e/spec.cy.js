@@ -1,4 +1,3 @@
-
 const baseURL = 'http://localhost:8080/#'
 const apiLogin = `${Cypress.env("apiUrl")}/login`
 
@@ -12,7 +11,7 @@ describe('Page Load Time Metrics', () => {
   it('should measure different page load metrics', () => {
     cy.visit(baseURL)
     cy.window().then((win) => {
-      const [navigationTiming] = win.performance.getEntriesByType('navigation') as PerformanceNavigationTiming[];
+      const [navigationTiming] = win.performance.getEntriesByType('navigation') as PerformanceNavigationTiming[]
       if (navigationTiming) {
         const pageLoadTime = navigationTiming.loadEventEnd - navigationTiming.startTime
         const ttfb = navigationTiming.responseStart - navigationTiming.startTime
