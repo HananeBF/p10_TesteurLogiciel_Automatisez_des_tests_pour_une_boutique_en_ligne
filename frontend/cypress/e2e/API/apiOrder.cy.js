@@ -36,9 +36,9 @@ describe('test api ajout de produit dans le panier produit avec stock', () => {
 
                 //avoir plus d'un produit en stock pour le commander
                 expect(response.body).to.have.property('availableStock').and.be.gte(1)
-                console.log(response.body.id)
+                
                 productId = response.body.id
-                console.log(productId)
+                
 
 
 
@@ -57,7 +57,7 @@ describe('test api ajout de produit dans le panier produit avec stock', () => {
                 }).then((response) => {
                     console.log(productId)
 
-                    //console.log(response)
+                    
                     expect(response.status).to.eq(200)
                 })
             }).then(() => {
@@ -70,7 +70,7 @@ describe('test api ajout de produit dans le panier produit avec stock', () => {
                     }
                 }).then((response) => {
 
-                    //console.log(response.body)
+                    
                     expect(response.status).to.eq(200)
 
                     let orderList = response.body.orderLines
@@ -99,11 +99,9 @@ describe('ajout en erreur car produit out of stock', () => {
             cy.request("GET", apiProduct + '/3').then((response) => {
                 expect(response.status).to.eq(200)
 
-                //avoir plus d'un produit en stock pour le commander
-                //expect(response.body).to.have.property('availableStock').and.be.gte(1)
-                console.log(response.body.id)
+                
                 productId = response.body.id
-                console.log(productId)
+             
 
                 cy.request({
                     method: 'PUT',
@@ -118,7 +116,7 @@ describe('ajout en erreur car produit out of stock', () => {
                 }).then((response) => {
                 
 
-                    //console.log(response.body)
+                    
                     expect(response.status).not.be.eq(200)
                     // si j'ai 200, le test est un échec
                     let orderList = response.body.orderLines

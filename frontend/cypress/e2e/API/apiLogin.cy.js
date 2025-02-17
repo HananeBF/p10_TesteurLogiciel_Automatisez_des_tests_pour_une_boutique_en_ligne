@@ -27,7 +27,7 @@ describe('test API login non passant', () => {
         failOnStatusCode: false
       }).then((response) => {
         expect(response.status).to.eq(401)
-        // je devrais récupérer le token pour le panier ? localStorage.setItem("token", data.token)
+        
         
       })
     })

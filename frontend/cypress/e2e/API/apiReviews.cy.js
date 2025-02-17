@@ -42,7 +42,7 @@ describe('test API reviews nominal', () => {
                 },
 
             }).then((response) => {
-                console.log(response)
+                
                 expect(response.status).to.eq(200)
             })
         })
@@ -64,7 +64,7 @@ describe('test API cas non passant car je ne suis pas connectée', () => {
             },
             failOnStatusCode: false
         }).then((response) => {
-            console.log(response)
+            
             expect(response.status).to.eq(401)
 
         })

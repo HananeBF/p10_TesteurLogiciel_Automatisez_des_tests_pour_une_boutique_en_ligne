@@ -9,7 +9,7 @@ const login = () => {
     cy.get('[data-cy="login-input-password"]').type("testtest")
    
     cy.get('[data-cy="login-submit"]').click()
-    //cy.wait('@Connect').its('response.statusCode').to.eq(200)
+    
 }
 const FormDisplay = () => {
     cy.get('body').then(($body) => {
@@ -31,7 +31,7 @@ describe('test ajout avis sur la page review', () => {
         cy.get('[data-cy="review-input-title"]').type('wahou')
         cy.get('[data-cy="review-input-comment"]').type('super !')
         cy.get('[data-cy="review-submit"]').click()
-        //reload forcé et après, vérifier les emplacements
+        
         cy.get('[data-cy="review-note"]').should('contain', 'tester le commentaire')
         cy.get('[data-cy="review-comment"]').each(($comment) => {
             expect($comment.text()).to.contain('super')

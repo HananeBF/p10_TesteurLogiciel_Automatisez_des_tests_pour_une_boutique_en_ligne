@@ -25,6 +25,7 @@ describe('recupérer des prodruits via api with descriptions and stock', () => {
             expect(productId).to.be.a("number")
             expect(response.status).to.eq(200)
             const responseBody = response.body
+            //vérifier les différents paramètres de chaque produit
             expect(responseBody).to.have.property('aromas')
             expect(responseBody).to.have.property('availableStock')
             expect(responseBody).to.have.property('description')
