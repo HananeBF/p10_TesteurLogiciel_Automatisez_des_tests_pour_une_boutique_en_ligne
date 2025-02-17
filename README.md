@@ -13,7 +13,7 @@
 
 ### Vérifiez l\'environnement Node
 
-Une fois le dépôt cloné et docker lancé, depuis un nouveau terminal entrez dans le dossier frontend, et installez Node.js
+Une fois le dépôt cloné et docker lancé, depuis un nouveau terminal entrez dans le dossier frontend, et au besoin, installez Node.js
 
 ``` 
 npm install 
@@ -28,15 +28,16 @@ Installez Cypress via votre gestionnaire de paquets
 npm install cypress --save-dev
 ```
 
-Pour le lancement de Cypress, vous pourrez lancer les tests automatisés via le terminal ou via le Launchpad.
+Pour le lancement de Cypress, vous pourrez lancer l'exécution des tests automatisés via le terminal ou via le Launchpad.
 
 ### Lancement de Cypress via le terminal
 
-A la fin de l'installation, si vous préférez utiliser le terminal poour voir le lancement des tests, vous pouvez utiliser cette commande 
+A la fin de l'installation, si vous préférez utiliser le terminal pour voir l'exécution de votre campagne de tests, vous pouvez utiliser cette commande 
 
 ``` 
 npx cypress run
 ```
+
 Un rapport des cas de test en success et des cas de tests en fail s'affichera à la fin de la campagne.
 
 Un dossier avec les screenshots des echecs sera installé dans le dossier Cypress, avec un sous-dossier pour chaque test qui a échoué.
